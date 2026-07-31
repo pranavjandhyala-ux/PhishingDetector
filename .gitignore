@@ -1,0 +1,13 @@
+# Local Python environment
+.venv/
+
+# Python-generated files
+__pycache__/
+*.py[cod]
+
+# VS Code-specific local settings
+.vscode/
+
+# Generated ML artifacts and datasets
+models/
+data/
