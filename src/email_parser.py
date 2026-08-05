@@ -17,6 +17,12 @@ def load_email_message(file_path: str | Path):
     except PermissionError as error:
         raise PermissionError(f"Permission denied reading email file: {path}") from error
 
+def extract_headers(message) -> dict[str, str]:
+    return {
+        "subject": message.get("Subject", ""),
+        "sender": message.get("From", ""),
+    }
+
 def extract_body_parts(message) -> dict[str, str]:
     plain_text = ""
     html_text = ""
