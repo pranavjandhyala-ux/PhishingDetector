@@ -1,0 +1,12 @@
+From: alerts@example.com
+To: test@example.com
+Subject: Action required
+MIME-Version: 1.0
+Content-Type: text/html; charset="utf-8"
+
+<html>
+  <body>
+    <p>Your <strong>account</strong> requires attention.</p>
+    <script>console.log("This should not become detector text");</script>
+  </body>
+</html>

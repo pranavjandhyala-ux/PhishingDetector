@@ -1,0 +1,7 @@
+From: alerts@example.com
+To: test@example.com
+Subject: Verify your account
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+
+Your account requires verification. Visit the official website directly.
