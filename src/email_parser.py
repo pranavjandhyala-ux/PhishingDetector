@@ -3,6 +3,9 @@ from email import policy
 from email.parser import BytesParser
 from bs4 import BeautifulSoup
 
+def parse_email_bytes(raw_email: bytes):
+    return BytesParser(policy=policy.default).parsebytes(raw_email)
+
 def load_email_message(file_path: str | Path):
     path = Path(file_path)
 
@@ -11,11 +14,15 @@ def load_email_message(file_path: str | Path):
 
     try:
         with path.open("rb") as email_file:
-            return BytesParser(policy=policy.default).parse(email_file)
+            raw_email = email_file.read()
     except FileNotFoundError as error:
         raise FileNotFoundError(f"Email file not found: {path}") from error
     except PermissionError as error:
-        raise PermissionError(f"Permission denied reading email file: {path}") from error
+        raise PermissionError(
+            f"Permission denied reading email file: {path}"
+        ) from error
+
+    return parse_email_bytes(raw_email)
 
 def extract_headers(message) -> dict[str, str]:
     return {
@@ -79,9 +86,7 @@ def select_email_body(body_parts: dict[str, str]) -> dict[str, str]:
         "body_source": "none",
     }
     
-def parse_eml(file_path: str | Path) -> dict[str, str]:
-    message = load_email_message(file_path)
-
+def build_parsed_email(message) -> dict[str, str]:
     headers = extract_headers(message)
     body_parts = extract_body_parts(message)
     body_info = select_email_body(body_parts)
@@ -92,3 +97,13 @@ def parse_eml(file_path: str | Path) -> dict[str, str]:
         "body": body_info["body"],
         "body_source": body_info["body_source"],
     }
+
+
+def parse_eml(file_path: str | Path) -> dict[str, str]:
+    message = load_email_message(file_path)
+    return build_parsed_email(message)
+
+
+def parse_eml_bytes(raw_email: bytes) -> dict[str, str]:
+    message = parse_email_bytes(raw_email)
+    return build_parsed_email(message)
